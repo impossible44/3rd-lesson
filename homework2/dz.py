@@ -9,7 +9,15 @@ cursor=conn.cursor()
 
 cursor.execute("PRAGMA foreign_keys = ON")#поддержка внешних ключей
 
-cursor.execute(""""
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE, 
+    description TEXT
+)
+""")
+
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -30,7 +38,7 @@ for item in data:
     #получ айди категории
     cursor.execute("""
         SELECT id FROM categories WHERE name = ?
-        """, (category["name"]))
+    """, (category["name"],))
     
     category_id = cursor.fetchone()[0]
     
@@ -45,6 +53,6 @@ for item in data:
     ))
     
     
-    conn.commit()
-    conn.close()
-    print("Gotovo")
+conn.commit()
+conn.close()
+print("Gotovo")
